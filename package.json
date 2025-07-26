@@ -1,41 +1,61 @@
 {
-    "name": "djelia",
-    "version": "0.2.0",
-    "description": "Node.js client for Djelia API, providing access to linguistic models for Bambara languages",
-    "main": "lib/index.js",
-    "scripts": {
-      "test": "jest",
-      "lint": "eslint lib/**/*.js"
-    },
-    "keywords": [
-      "djelia",
-      "nlp",
-      "translation",
-      "transcription",
-      "text-to-speech",
-      "african languages",
-      "bambara",
-      "mali"
-    ],
-    "author": "Djelia <support@djelia.cloud>",
-    "license": "MIT",
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/djelia-org/djelia-js-client.git"
-    },
-    "bugs": {
-      "url": "https://github.com/djelia-org/djelia-js-client/issues"
-    },
-    "homepage": "https://djelia.cloud",
-    "dependencies": {
-      "axios": "^1.6.0",
-      "form-data": "^4.0.0"
-    },
-    "devDependencies": {
-      "eslint": "^8.52.0",
-      "jest": "^29.7.0"
-    },
-    "engines": {
-      "node": ">=14.0.0"
-    }
-  }
+  "name": "djelia",
+  "version": "1.1.1",
+  "description": "Djelia JavaScript SDK - Advanced AI for African Languages",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src/ examples/ tests/",
+    "lint:fix": "eslint src/ examples/ tests/ --fix",
+    "format": "prettier --write src/ examples/ tests/",
+    "build": "npm run lint && npm run test",
+    "example": "node examples/cookbook.js"
+  },
+  "keywords": [
+    "djelia",
+    "nlp",
+    "translation",
+    "transcription",
+    "text-to-speech",
+    "tts",
+    "african languages",
+    "bambara",
+    "mali",
+    "ai",
+    "machine learning",
+    "speech recognition",
+    "voice synthesis",
+    "multilingual",
+    "linguistics"
+  ],
+  "author": "sudoping01",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/djelia-org/djelia-javascript-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/djelia-org/djelia-javascript-sdk/issues"
+  },
+  "homepage": "https://djelia.cloud",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "form-data": "^4.0.0",
+    "dotenv": "^16.3.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "files": [
+    "index.js",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ]
+}
