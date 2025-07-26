@@ -1,4 +1,3 @@
-// src/client/client.js
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
@@ -23,7 +22,6 @@ class Djelia {
         this.transcription = new Transcription(this);
         this.tts = new TTS(this);
         
-        // Configure axios instance with retry logic
         this.axios = axios.create({
             timeout: 30000,
             headers: this.auth.getHeaders()
@@ -33,7 +31,7 @@ class Djelia {
     }
     
     _setupRetry() {
-        // Simple retry logic - can be enhanced with exponential backoff
+
         this.axios.interceptors.response.use(
             response => response,
             async error => {
@@ -70,7 +68,6 @@ class Djelia {
                 ...options
             };
             
-            // Convert boolean params to lowercase strings
             if (config.params) {
                 Object.keys(config.params).forEach(key => {
                     if (typeof config.params[key] === 'boolean') {
@@ -99,7 +96,6 @@ class Djelia {
                 ...options
             };
             
-            // Convert boolean params to lowercase strings
             if (config.params) {
                 Object.keys(config.params).forEach(key => {
                     if (typeof config.params[key] === 'boolean') {
