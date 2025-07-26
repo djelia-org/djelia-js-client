@@ -74,8 +74,8 @@ module.exports = {
         'linebreak-style': ['error', 'unix'],
         'quotes': ['error', 'single'],
         'semi': ['error', 'always'],
-        'no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],  // Change to 'warn'
+        'no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],  
         'no-console': 'off',
-        'no-empty': ['error', { 'allowEmptyCatch': true }],         // Allow empty catch
+        'no-empty': ['error', { 'allowEmptyCatch': true }],         
     },
 };
