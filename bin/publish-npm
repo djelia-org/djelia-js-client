@@ -4,18 +4,13 @@ set -eux
 
 npm config set '//registry.npmjs.org/:_authToken' "$NPM_TOKEN"
 
-
 yarn build
 
-
-cd dist
-
+# Remove this line: cd dist
 
 VERSION="$(node -p "require('./package.json').version")"
 
-
 if [[ "$VERSION" =~ -([a-zA-Z]+) ]]; then
-
   TAG="${BASH_REMATCH[1]}"
 else
   TAG="latest"
