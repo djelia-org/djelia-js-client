@@ -1,4 +1,3 @@
-// src/auth/auth.js
 const { isValidUUID } = require('../utils/utils');
 const { ErrorsMessage } = require('../models/models');
 
@@ -21,7 +20,6 @@ class Auth {
     getHeadersForFormData() {
         return {
             'x-api-key': this.apiKey
-            // Don't set Content-Type for FormData - let the browser/axios set it
         };
     }
 }
