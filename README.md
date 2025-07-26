@@ -1,12 +1,33 @@
-# Djelia JavaScript SDK
+# <h1 style="color:#00FFFF;"> Djelia JavaScript SDK 🇲🇱
 
-> **Advanced AI for African Languages** 🇲🇱
+Welcome to the Djelia JavaScript SDK! This powerful library enables seamless integration with Djelia's AI services for African languages, featuring translation, transcription, and text-to-speech capabilities. Built with modern JavaScript/Node.js, it offers both Promise-based and streaming APIs for maximum flexibility. can't be fun, right? Let's dive in!
 
-Welcome to the Djelia JavaScript SDK! This powerful library enables seamless integration with Djelia's AI services for African languages, featuring translation, transcription, and text-to-speech capabilities. Built with modern JavaScript/Node.js, it offers both Promise-based and streaming APIs for maximum flexibility.
+## <h3 style="color:#00FFFF;"> Table of Contents
 
-## 🚀 Quick Start
+1. [Installation](#installation)
+2. [Client Initialization](#client-initialization)
+   - 2.1 [API Key Loading](#api-key-loading)
+   - 2.2 [Client Setup](#client-setup)
+3. [Operations](#operations)
+   - 3.1 [Translation](#translation)
+     - 3.1.1 [Get Supported Languages](#get-supported-languages)
+     - 3.1.2 [Translate Text](#translate-text)
+   - 3.2 [Transcription](#transcription)
+     - 3.2.1 [Basic Transcription](#basic-transcription)
+     - 3.2.2 [Streaming Transcription](#streaming-transcription)
+     - 3.2.3 [French Translation](#french-translation)
+   - 3.3 [Text-to-Speech (TTS)](#text-to-speech-tts)
+     - 3.3.1 [TTS v1 with Speaker ID](#tts-v1-with-speaker-id)
+     - 3.3.2 [TTS v2 with Natural Descriptions](#tts-v2-with-natural-descriptions)
+     - 3.3.3 [Streaming TTS](#streaming-tts)
+   - 3.4 [Version Management](#version-management)
+   - 3.5 [Parallel Operations](#parallel-operations)
+4. [Error Handling](#error-handling)
+5. [Explore the Djelia SDK Cookbook](#explore-the-djelia-sdk-cookbook)
 
-### Installation
+## <h3 style="color:#00FFFF;"> Installation
+
+Let's kick things off by installing the SDK
 
 ```bash
 npm install djelia
@@ -18,571 +39,435 @@ Or using yarn:
 yarn add djelia
 ```
 
-### Basic Usage
-
-```javascript
-const { Djelia, Language, TranslationRequest } = require('djelia');
-
-// Initialize client
-const client = new Djelia('your-api-key');
-
-// Translate text
-const request = new TranslationRequest(
-    'Hello, how are you?',
-    Language.ENGLISH,
-    Language.BAMBARA
-);
-
-const response = await client.translation.translate(request);
-console.log(response.text); // Bambara translation
+Install the Djelia JavaScript SDK directly from GitHub:
+```bash
+npm install git+https://github.com/djelia-org/djelia-javascript-sdk.git
 ```
 
-## 📖 Table of Contents
-
-1. [Installation](#installation)
-2. [Authentication](#authentication)
-3. [Translation](#translation)
-4. [Transcription](#transcription)
-5. [Text-to-Speech (TTS)](#text-to-speech-tts)
-6. [Streaming](#streaming)
-7. [Error Handling](#error-handling)
-8. [Examples](#examples)
-9. [API Reference](#api-reference)
-
-## 🔐 Authentication
-
-### Environment Variables
-
-Create a `.env` file in your project root:
+Alternatively, use pnpm for faster dependency resolution:
 
 ```bash
-DJELIA_API_KEY=your_api_key_here
-TEST_AUDIO_FILE=path/to/your/audio.wav  # Optional for testing
+pnpm install djelia
 ```
 
-### Direct API Key
+```bash
+pnpm install git+https://github.com/djelia-org/djelia-javascript-sdk.git
+```
+
+
+## <h3 style="color:#00FFFF;"> Client Initialization
+
+Before we can do anything fancy, we need to set up our client. This involves loading our API key and initializing the client. Here's how:
+
+## <h3 style="color:#00FFFF;"> API Key Loading
+
+First, grab your API key from a `.env` file - it's the safest way to keep your secrets, well, secret! If you don't have one yet, head to the Djelia dashboard and conjure one up.
+
+```javascript
+require('dotenv').config();
+
+const apiKey = process.env.DJELIA_API_KEY;
+
+// Alternatively: const apiKey = "your_api_key_here" (but shh, that's not safe!)
+
+// Specify your audio file for transcription tests
+const audioFilePath = process.env.TEST_AUDIO_FILE || "audio.wav";
+```
+
+> <span style="color:red;"> **Note:** </span> Ensure your audio file (e.g., `audio.wav`) exists at the specified path. Set `TEST_AUDIO_FILE` in your `.env` file if using a custom path:
+> ```bash
+> echo "TEST_AUDIO_FILE=/path/to/your/audio.wav" >> .env
+> ```
+> Without a valid audio file, transcription operations will fail. That's not what you want right 😂
+
+<h3 style="color:#00FFFF;">Client Setup</h3>
+
+For those who like to keep things simple and powerful, here's how to set up the client:
 
 ```javascript
 const { Djelia } = require('djelia');
 
-// With API key parameter
-const client = new Djelia('your-api-key');
+const djeliaClient = new Djelia(apiKey);
 
-// Or using environment variable
-const client = new Djelia(); // Reads from DJELIA_API_KEY
+// if DJELIA_API_KEY is already set you can just do : (yes I know I'm making your life easy 😂)
+const djeliaClient = new Djelia();
 ```
 
-## 🌍 Translation
+## <h3 style="color:#00FFFF;"> Operations 🇲🇱
 
-### Get Supported Languages
+<span style="color:gold;"> Now for the fun part - let's do stuff with the Djelia API! We'll cover translating between African languages, transcribing audio (with streaming!), and generating natural speech with beautiful JavaScript async/await patterns.</span> <span style="color:red;"> Yes, yes, let's do it ❤️‍🔥! 
+
+## <h3 style="color:#00FFFF;"> Translation
+
+Let's unlock the power of multilingual communication! 
+
+## <h3 style="color:#00FFFF;"> Get Supported Languages
+
+First, let's see what languages we can work with.
+
+Simple and straightforward - get your supported languages and print them:
 
 ```javascript
-const languages = await client.translation.getSupportedLanguages();
+const languages = await djeliaClient.translation.getSupportedLanguages();
 languages.forEach(lang => {
     console.log(`${lang.name}: ${lang.code}`);
 });
 ```
 
-### Translate Text
+## <h3 style="color:#00FFFF;"> Translate Text
+
+Let's translate some text between beautiful 🇲🇱 languages and others. Feel free to try different language combinations!
 
 ```javascript
 const { TranslationRequest, Language, Versions } = require('djelia');
 
 const request = new TranslationRequest(
-    'Bonjour, comment allez-vous?',
-    Language.FRENCH,
+    "Hello, how are you today?",
+    Language.ENGLISH,
     Language.BAMBARA
 );
-
-const response = await client.translation.translate(request, Versions.v1);
-console.log(`Translation: ${response.text}`);
 ```
 
-## 🎤 Transcription
+Create that translation and see what you get:
 
-### Basic Transcription
+```javascript
+const { TranslationResponse } = require('djelia');
+
+try {
+    const response = await djeliaClient.translation.translate(request, Versions.v1);
+    console.log(`Original: ${request.text}`);
+    console.log(`Translation: ${response.text}`);
+} catch (error) {
+    console.log(`Translation error: ${error.message}`);
+}
+```
+
+## <h3 style="color:#00FFFF;"> Transcription
+
+Time to turn audio into text with timestamps and everything!
+
+## <h3 style="color:#00FFFF;"> Basic Transcription
+
+Let's transcribe some audio files. Make sure you have an audio file ready - check <span style="color:red;"> audioFilePath</span>.
 
 ```javascript
 const { Versions } = require('djelia');
 
-// From file path
-const transcription = await client.transcription.transcribe(
-    'audio.wav',
-    false,    // translateToFrench
-    false,    // stream
-    Versions.v2
-);
-
-transcription.forEach(segment => {
-    console.log(`[${segment.start}s - ${segment.end}s]: ${segment.text}`);
-});
-```
-
-### French Translation
-
-```javascript
-const frenchResult = await client.transcription.transcribe(
-    'audio.wav',
-    true,     // translateToFrench
-    false,    // stream
-    Versions.v2
-);
-
-console.log(`French: ${frenchResult.text}`);
-```
-
-### Streaming Transcription
-
-```javascript
-const stream = await client.transcription.transcribe(
-    'audio.wav',
-    false,    // translateToFrench
-    true,     // stream
-    Versions.v2
-);
-
-for await (const segment of stream) {
-    console.log(`Real-time: [${segment.start}s]: ${segment.text}`);
+try {
+    const transcription = await djeliaClient.transcription.transcribe(
+        audioFilePath,
+        false,    // translateToFrench
+        false,    // stream
+        Versions.v2
+    );
+    console.log(`Transcribed ${transcription.length} segments:`);
+    transcription.forEach(segment => {
+        console.log(`[${segment.start.toFixed(2)}s - ${segment.end.toFixed(2)}s]: ${segment.text}`);
+    });
+} catch (error) {
+    console.log(`Transcription error: ${error.message}`);
 }
 ```
 
-## 🔊 Text-to-Speech (TTS)
+## <h3 style="color:#00FFFF;"> Streaming Transcription
 
-### TTS v1 (Speaker IDs)
-
-```javascript
-const { TTSRequest, Versions } = require('djelia');
-
-const request = new TTSRequest(
-    'Aw ni ce, i ka kɛnɛ wa?',  // Bambara text
-    1  // Speaker ID (0-4)
-);
-
-const audioFile = await client.tts.textToSpeech(
-    request,
-    'output.wav',
-    false,      // stream
-    Versions.v1
-);
-
-console.log(`Audio saved to: ${audioFile}`);
-```
-
-### TTS v2 (Natural Descriptions)
+Want realtime results? Let's stream that transcription! <span style="color:gold">This is really important for live applications</span>
 
 ```javascript
-const { TTSRequestV2, Versions } = require('djelia');
+console.log("Streaming transcription (showing first 3 segments)...");
+let segmentCount = 0;
 
-const request = new TTSRequestV2(
-    'Aw ni ce, i ka kɛnɛ wa?',
-    'Seydou speaks with a warm, welcoming tone',  // Must include Moussa, Sekou, or Seydou
-    1.0  // Chunk size (0.1 - 2.0)
-);
-
-const audioFile = await client.tts.textToSpeech(
-    request,
-    'natural_output.wav',
-    false,      // stream
-    Versions.v2
-);
-```
-
-### Streaming TTS
-
-```javascript
-const streamRequest = new TTSRequestV2(
-    'Long text for streaming...',
-    'Moussa speaks clearly and naturally'
-);
-
-const stream = await client.tts.textToSpeech(
-    streamRequest,
-    'streamed_output.wav',
-    true,       // stream
-    Versions.v2
-);
-
-for await (const chunk of stream) {
-    console.log(`Received chunk: ${chunk.length} bytes`);
+try {
+    const stream = await djeliaClient.transcription.transcribe(
+        audioFilePath,
+        false,    // translateToFrench
+        true,     // stream
+        Versions.v2
+    );
+    
+    for await (const segment of stream) {
+        segmentCount++;
+        console.log(`Segment ${segmentCount}: [${segment.start.toFixed(2)}s]: ${segment.text}`);
+        
+        if (segmentCount >= 3) {  // Just showing first 3 for demo
+            console.log("...and more segments!");
+            break;
+        }
+    }
+} catch (error) {
+    console.log(`Streaming transcription error: ${error.message}`);
 }
 ```
 
-## 🌊 Streaming
+## <h3 style="color:#00FFFF;"> French Translation
 
-All streaming operations return async generators:
+Want to transcribe and translate to French in one go? We've got you covered!
 
 ```javascript
-// Transcription streaming
-const transcriptionStream = await client.transcription.transcribe(
-    'audio.wav', false, true, Versions.v2
-);
-
-for await (const segment of transcriptionStream) {
-    // Process each segment as it arrives
-    console.log(segment.text);
-}
-
-// TTS streaming
-const ttsStream = await client.tts.textToSpeech(
-    request, 'output.wav', true, Versions.v2
-);
-
-for await (const audioChunk of ttsStream) {
-    // Process each audio chunk
-    console.log(`Chunk size: ${audioChunk.length}`);
+try {
+    const frenchTranscription = await djeliaClient.transcription.transcribe(
+        audioFilePath,
+        true,     // translateToFrench
+        false,    // stream
+        Versions.v2
+    );
+    console.log(`French translation: ${frenchTranscription.text}`);
+} catch (error) {
+    console.log(`French transcription error: ${error.message}`);
 }
 ```
 
-## ⚠️ Error Handling
+## <h3 style="color:#00FFFF;"> Text-to-Speech (TTS)
 
-The SDK provides specific exception classes:
+Let's make some beautiful voices! Choose between numbered speakers or describe exactly how you want it to sound.
+
+## <h3 style="color:#00FFFF;"> TTS v1 with Speaker ID
+
+Classic approach with speaker IDs (0-4). Simple and effective!
 
 ```javascript
-const {
-    AuthenticationError,
-    APIError,
-    ValidationError,
-    LanguageError,
-    SpeakerError
+const { TTSRequest } = require('djelia');
+
+const ttsRequestV1 = new TTSRequest(
+    "Aw ni ce, i ka kɛnɛ wa?",  // "Hello, how are you?" in Bambara
+    1  // Choose from 0, 1, 2, 3, or 4
+);
+```
+
+Generate that audio and save it:
+
+```javascript
+try {
+    const audioFileV1 = await djeliaClient.tts.textToSpeech(
+        ttsRequestV1,
+        "hello_v1.wav",
+        false,      // stream
+        Versions.v1
+    );
+    console.log(`Audio saved to: ${audioFileV1}`);
+} catch (error) {
+    console.log(`TTS v1 error: ${error.message}`);
+}
+```
+
+## <h3 style="color:#00FFFF;"> TTS v2 with Natural Descriptions
+
+This is where it gets fun! Describe exactly how you want the voice to sound, but make sure to include one of the supported speakers: Moussa, Sekou, or Seydou.
+
+```javascript
+const { TTSRequestV2 } = require('djelia');
+
+const ttsRequestV2 = new TTSRequestV2(
+    "Aw ni ce, i ka kɛnɛ wa?",
+    "Seydou speaks with a warm, welcoming tone",  // Must include Moussa, Sekou, or Seydou
+    1.0  // Control speech pacing (0.1 - 2.0)
+);
+```
+
+> <span style="color:red"> **Note:** </span> The description field must include one of the supported speakers. For example, "Moussa speaks with a warm tone" is valid, but "Natural tone" will raise an error. 
+
+Create natural sounding speech:
+
+```javascript
+try {
+    const audioFileV2 = await djeliaClient.tts.textToSpeech(
+        ttsRequestV2,
+        "hello_v2.wav",
+        false,      // stream
+        Versions.v2
+    );
+    console.log(`Natural audio saved to: ${audioFileV2}`);
+} catch (error) {
+    console.log(`TTS v2 error: ${error.message}`);
+}
+```
+
+## <h3 style="color:#00FFFF;"> Streaming TTS
+
+Realtime audio generation! Get chunks as they're created <span style="color:red">(v2 only)</span>.
+
+```javascript
+const streamingTtsRequest = new TTSRequestV2(
+    "An filɛ ni ye yɔrɔ minna ni an ye an sigi ka a layɛ yala an bɛ ka baara min kɛ ɛsike a kɛlen don ka Ɲɛ wa, ...............", // a very long text 
+    "Seydou speaks clearly and naturally",
+    1.0
+);
+```
+
+> <span style="color:red">**Note:**</span> By default, the SDK may process multiple chunks (e.g., up to 5 in some configurations). This example limits to 5 chunks for consistency, but you can adjust the limit based on your application needs.
+
+Stream that audio generation: (this is handsome)
+
+```javascript
+console.log("Streaming TTS generation...");
+let chunkCount = 0;
+let totalBytes = 0;
+const maxChunks = 5;
+
+try {
+    const stream = await djeliaClient.tts.textToSpeech(
+        streamingTtsRequest,
+        "streamed_audio.wav",
+        true,       // stream
+        Versions.v2
+    );
+    
+    for await (const chunk of stream) {
+        chunkCount++;
+        totalBytes += chunk.length;
+        console.log(`Chunk ${chunkCount}: ${chunk.length} bytes`);
+        
+        if (chunkCount >= maxChunks) {
+            console.log(`...and more chunks! (Total so far: ${totalBytes} bytes)`);
+            break;
+        }
+    }
+} catch (error) {
+    console.log(`Streaming TTS error: ${error.message}`);
+}
+```
+
+## <h3 style="color:#00FFFF;"> Version Management
+
+The SDK supports multiple API versions (v1, v2) via the Versions enum. Use `Versions.latest()` to get the latest version or `Versions.allVersions()` to list available versions.
+
+```javascript
+const { Versions } = require('djelia');
+
+console.log(`Latest version: ${Versions.latest()}`);
+console.log(`Available versions: ${Versions.allVersions().map(v => `v${v}`)}`);
+
+// Use specific version
+try {
+    const transcription = await djeliaClient.transcription.transcribe(
+        audioFilePath,
+        false,    // translateToFrench
+        false,    // stream
+        Versions.v2
+    );
+    console.log(`Transcribed ${transcription.length} segments`);
+} catch (error) {
+    console.log(`Transcription error: ${error.message}`);
+}
+```
+
+## <h3 style="color:#00FFFF;"> Parallel Operations
+
+Run multiple API operations concurrently using `Promise.allSettled()`. This is great for performance in applications needing simultaneous translations, transcriptions, or TTS generation.
+
+```javascript
+const { TranslationRequest, Language, TTSRequestV2, Versions } = require('djelia');
+
+async function parallelOperations() {
+    try {
+        const translationRequest = new TranslationRequest(
+            "Hello", 
+            Language.ENGLISH, 
+            Language.BAMBARA
+        );
+        const ttsRequest = new TTSRequestV2(
+            "Aw ni ce, i ka kɛnɛ wa?",
+            "Moussa speaks with a clear tone",
+            1.0
+        );
+        
+        const results = await Promise.allSettled([
+            djeliaClient.translation.translate(translationRequest, Versions.v1),
+            djeliaClient.transcription.transcribe(audioFilePath, false, false, Versions.v2),
+            djeliaClient.tts.textToSpeech(ttsRequest, "parallel_tts.wav", false, Versions.v2)
+        ]);
+        
+        results.forEach((result, i) => {
+            if (result.status === 'fulfilled') {
+                console.log(`Operation ${i+1} succeeded: ${result.value.constructor.name}`);
+            } else {
+                console.log(`Operation ${i+1} failed: ${result.reason.message}`);
+            }
+        });
+    } catch (error) {
+        console.log(`Parallel operations error: ${error.message}`);
+    }
+}
+
+// Run it
+parallelOperations();
+```
+
+## <h3 style="color:#00FFFF;"> Error Handling
+
+The Djelia SDK provides specific exception classes to handle errors gracefully. Use these to catch and respond to issues like invalid API keys, unsupported languages, or incorrect speaker descriptions.
+
+```javascript
+const { 
+    AuthenticationError, 
+    APIError, 
+    ValidationError, 
+    LanguageError, 
+    SpeakerError 
 } = require('djelia');
 
 try {
-    const response = await client.translation.translate(request);
+    const response = await djeliaClient.translation.translate(request, Versions.v1);
+    console.log(`Translation: ${response.text}`);
 } catch (error) {
     if (error instanceof AuthenticationError) {
-        console.error('Invalid API key');
+        console.error('Authentication error (check API key):', error.message);
     } else if (error instanceof LanguageError) {
-        console.error('Unsupported language');
-    } else if (error instanceof SpeakerError) {
-        console.error('Invalid speaker configuration');
+        console.error('Invalid or unsupported language:', error.message);
+    } else if (error instanceof ValidationError) {
+        console.error('Validation error (e.g., invalid input):', error.message);
     } else if (error instanceof APIError) {
-        console.error(`API Error (${error.statusCode}): ${error.message}`);
+        console.error(`API error (status ${error.statusCode}): ${error.message}`);
     } else {
         console.error('Unexpected error:', error.message);
     }
 }
 ```
 
-## 🎯 Examples
+## <h3 style="color:#00FFFF;"> Common Exceptions:
 
-### Complete Translation Workflow
+- **AuthenticationError**: Invalid or expired API key (HTTP 401).
+- **APIError**: General API issues, including forbidden access (403) or resource not found (404).
+- **ValidationError**: Invalid inputs, such as missing audio files or incorrect parameters (422).
+- **LanguageError**: Unsupported source or target language.
+- **SpeakerError**: Invalid speaker ID (TTS v1) or description missing a supported speaker (TTS v2).
 
-```javascript
-const { Djelia, TranslationRequest, Language, Versions } = require('djelia');
+Check logs for detailed errors, and ensure your `.env` file includes a valid `DJELIA_API_KEY` and `TEST_AUDIO_FILE`.
 
-async function translateWorkflow() {
-    const client = new Djelia();
-    
-    // Get available languages
-    const languages = await client.translation.getSupportedLanguages();
-    console.log('Available languages:', languages.map(l => l.name));
-    
-    // Translate multiple texts
-    const texts = [
-        'Hello, how are you?',
-        'Good morning',
-        'Thank you very much'
-    ];
-    
-    for (const text of texts) {
-        const request = new TranslationRequest(text, Language.ENGLISH, Language.BAMBARA);
-        const response = await client.translation.translate(request, Versions.v1);
-        console.log(`"${text}" → "${response.text}"`);
-    }
-}
-```
+## <h3 style="color:#00FFFF;"> Explore the Djelia SDK Cookbook
 
-### Audio Processing Pipeline
+Want to take your Djelia SDK skills to the next level? Check out the **Djelia SDK Cookbook** for a comprehensive example that puts it all together! The cookbook demonstrates:
 
-```javascript
-async function audioProcessingPipeline(audioFile) {
-    const client = new Djelia();
-    
-    // 1. Transcribe audio
-    console.log('Transcribing audio...');
-    const segments = await client.transcription.transcribe(audioFile);
-    
-    // 2. Extract full text
-    const fullText = segments.map(s => s.text).join(' ');
-    console.log('Transcribed text:', fullText);
-    
-    // 3. Translate to French
-    const translationRequest = new TranslationRequest(
-        fullText, 
-        Language.BAMBARA, 
-        Language.FRENCH
-    );
-    const translation = await client.translation.translate(translationRequest);
-    console.log('French translation:', translation.text);
-    
-    // 4. Generate speech from translation
-    const ttsRequest = new TTSRequestV2(
-        translation.text,
-        'Sekou speaks with natural pronunciation'
-    );
-    const audioOutput = await client.tts.textToSpeech(
-        ttsRequest, 
-        'french_output.wav'
-    );
-    console.log('Generated audio:', audioOutput);
-}
-```
+- **Full Test Suite**: Run comprehensive tests for translation, transcription, and TTS, with detailed summaries.
+- **Error Handling**: Robust try-catch blocks and logging to catch and debug issues.
+- **Configuration Management**: Load API keys and audio paths from a `.env` file with validation.
+- **Advanced Features**: Parallel API operations, version management, and streaming capabilities.
+- **Modular Design**: Organized code structure for easy customization.
 
-### Parallel Operations
-
-```javascript
-async function parallelProcessing() {
-    const client = new Djelia();
-    
-    const operations = [
-        client.translation.getSupportedLanguages(),
-        client.translation.translate(
-            new TranslationRequest('Hello', Language.ENGLISH, Language.BAMBARA)
-        ),
-        client.transcription.transcribe('audio.wav'),
-        client.tts.textToSpeech(
-            new TTSRequestV2('Test', 'Moussa speaks clearly'),
-            'test.wav'
-        )
-    ];
-    
-    const results = await Promise.allSettled(operations);
-    results.forEach((result, index) => {
-        if (result.status === 'fulfilled') {
-            console.log(`Operation ${index + 1}: Success`);
-        } else {
-            console.log(`Operation ${index + 1}: Failed - ${result.reason.message}`);
-        }
-    });
-}
-```
-
-## 📚 API Reference
-
-### Classes
-
-- **`Djelia(apiKey?, baseUrl?)`** - Main client class
-- **`TranslationRequest(text, source, target)`** - Translation request
-- **`TTSRequest(text, speaker)`** - TTS v1 request with speaker ID
-- **`TTSRequestV2(text, description, chunkSize?)`** - TTS v2 request with natural description
-
-### Enums
-
-- **`Language`** - Supported languages (FRENCH, ENGLISH, BAMBARA)
-- **`Versions`** - API versions (v1, v2)
-
-### Services
-
-- **`client.translation`** - Translation operations
-- **`client.transcription`** - Audio transcription
-- **`client.tts`** - Text-to-speech generation
-
-### Methods
-
-#### Translation
-- `getSupportedLanguages()` → `Promise<SupportedLanguageSchema[]>`
-- `translate(request, version?)` → `Promise<TranslationResponse>`
-
-#### Transcription
-- `transcribe(audioFile, translateToFrench?, stream?, version?)` → `Promise<TranscriptionSegment[]|FrenchTranscriptionResponse|AsyncGenerator>`
-
-#### TTS
-- `textToSpeech(request, outputFile?, stream?, version?)` → `Promise<string|Buffer|AsyncGenerator>`
-
-## 🧪 Testing
-
-Run the comprehensive test suite:
+To run the cookbook, clone the repository, install dependencies, and execute:
 
 ```bash
-# Clone the repository
 git clone https://github.com/djelia-org/djelia-javascript-sdk.git
-cd djelia-javascript-sdk
-
-# Install dependencies
 npm install
 
-# Set up environment
-cp .env.example .env
-# Edit .env with your API key and audio file path
-
-# Run the cookbook example
+cd djelia-javascript-sdk
 npm run example
 ```
 
-## 📁 Project Structure
+Or run it directly:
 
-```
-djelia-javascript-sdk/
-├── index.js                 # Main entry point
-├── src/
-│   ├── client/
-│   │   └── client.js        # Main client implementation
-│   ├── models/
-│   │   └── models.js        # Data models and enums
-│   ├── services/
-│   │   ├── translation.js   # Translation service
-│   │   ├── transcription.js # Transcription service
-│   │   └── tts.js          # Text-to-speech service
-│   ├── auth/
-│   │   └── auth.js         # Authentication handling
-│   ├── config/
-│   │   └── settings.js     # Configuration management
-│   └── utils/
-│       ├── utils.js        # Utility functions
-│       ├── exceptions.js   # Custom exceptions
-│       └── errors.js       # Error handling
-├── examples/
-│   └── cookbook.js         # Comprehensive example
-├── tests/                  # Test files
-├── package.json
-└── README.md
+```bash
+node examples/cookbook.js
 ```
 
-## 🔧 Configuration
+Make sure your `.env` file includes `DJELIA_API_KEY` and `TEST_AUDIO_FILE`. The cookbook is perfect for developers who want a ready-to-use template for building real-world applications with the Djelia SDK.
 
-### Environment Variables
+## <h3 style="color:#00FFFF;"> Wrapping Up
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `DJELIA_API_KEY` | Your Djelia API key | Yes | - |
-| `BASE_URL` | API base URL | No | `https://djelia.cloud` |
-| `TEST_AUDIO_FILE` | Path to test audio file | No | `audio.wav` |
+And there you have it - a full workshop on using the Djelia JavaScript SDK! You've installed it, set up the client, and mastered translation, transcription, and text-to-speech with beautiful async/await patterns. Pretty cool, right? Feel free to tweak the code, explore different languages and voices, and check out the Djelia SDK Cookbook for a deeper dive.
 
-### Settings
+**Pro tip**: The async/await patterns are perfect for applications that need to handle multiple operations efficiently. The streaming features are fantastic for realtime applications. And remember, Bambara is just one of the beautiful African languages you can work with!
 
-```javascript
-const { Settings } = require('djelia/src/config/settings');
+<span style="color:red"><strong>IMPORTANT</strong></span>: If you encounter any issues, please create an issue in the repository, explain the problem you encountered (include logs if possible), and tag @sudoping01.
 
-const settings = new Settings();
-console.log(settings.baseUrl);           // API base URL
-console.log(settings.validSpeakerIds);   // [0, 1, 2, 3, 4]
-console.log(settings.validTtsV2Speakers); // ['Moussa', 'Sekou', 'Seydou']
-```
-
-## 🎵 Version Management
-
-```javascript
-const { Versions } = require('djelia');
-
-console.log(Versions.latest());        // 2
-console.log(Versions.allVersions());   // [1, 2]
-console.log(Versions.toString(2));     // "v2"
-
-// Use specific versions
-await client.translation.translate(request, Versions.v1);
-await client.transcription.transcribe(audioFile, false, false, Versions.v2);
-```
-
-## 🚨 Common Errors and Solutions
-
-### Authentication Issues
-
-```javascript
-// ❌ Invalid API key format
-const client = new Djelia('invalid-key');
-// Error: API key must be provided via parameter or environment variable
-
-// ✅ Valid UUID format
-const client = new Djelia('12345678-1234-1234-1234-123456789abc');
-```
-
-### Speaker Configuration
-
-```javascript
-// ❌ Invalid speaker ID for TTS v1
-const request = new TTSRequest('text', 99);
-// Error: Speaker ID must be one of [0, 1, 2, 3, 4], got 99
-
-// ❌ Missing supported speaker in TTS v2 description
-const request = new TTSRequestV2('text', 'natural voice');
-// Error: Description must contain one of the supported speakers: [Moussa, Sekou, Seydou]
-
-// ✅ Valid configurations
-const requestV1 = new TTSRequest('text', 1);
-const requestV2 = new TTSRequestV2('text', 'Seydou speaks naturally');
-```
-
-### File Handling
-
-```javascript
-// ❌ File not found
-await client.transcription.transcribe('nonexistent.wav');
-// Error: Audio file not found: nonexistent.wav
-
-// ✅ Check file existence
-const fs = require('fs');
-if (fs.existsSync('audio.wav')) {
-    await client.transcription.transcribe('audio.wav');
-}
-```
-
-## 🔄 Migration from Python SDK
-
-If you're migrating from the Python SDK, here are the key differences:
-
-### Import Statements
-
-```python
-# Python
-from djelia import Djelia, Language, TranslationRequest
-
-# JavaScript
-const { Djelia, Language, TranslationRequest } = require('djelia');
-```
-
-### Async/Await
-
-```python
-# Python (async)
-async with DjeliaAsync() as client:
-    result = await client.translation.translate(request)
-
-# JavaScript
-const client = new Djelia();
-const result = await client.translation.translate(request);
-```
-
-### Streaming
-
-```python
-# Python
-for segment in client.transcription.transcribe(audio_file, stream=True):
-    print(segment.text)
-
-# JavaScript
-const stream = await client.transcription.transcribe(audioFile, false, true);
-for await (const segment of stream) {
-    console.log(segment.text);
-}
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-- **Documentation**: [https://djelia.cloud/docs](https://djelia.cloud/docs)
-- **Issues**: [GitHub Issues](https://github.com/djelia-org/djelia-javascript-sdk/issues)
-- **Email**: [support@djelia.cloud](mailto:support@djelia.cloud)
-- **Community**: Tag `@sudoping01` for questions
-
-## 🙏 Acknowledgments
-
-- Built with ❤️ for 🇲🇱 and African language processing
-- Powered by advanced AI for multilingual communication
-- Thanks to all contributors and the open-source community
-
----
-
-**Happy coding with Djelia! 🚀** Transform your applications with the power of African language AI.
+**Great job, bro 🫂! This is a fantastic integration guide built with ❤️ for 🇲🇱 and beyond!**<br>
