@@ -6,8 +6,6 @@ npm config set '//registry.npmjs.org/:_authToken' "$NPM_TOKEN"
 
 yarn build
 
-# Remove this line: cd dist
-
 VERSION="$(node -p "require('./package.json').version")"
 
 if [[ "$VERSION" =~ -([a-zA-Z]+) ]]; then
@@ -16,5 +14,4 @@ else
   TAG="latest"
 fi
 
-# Publish with the appropriate tag
 yarn publish --access public --tag "$TAG"
