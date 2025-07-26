@@ -1,4 +1,5 @@
 # <h1 style="color:#00FFFF;"> Djelia JavaScript SDK 🇲🇱
+[![NPM version](https://img.shields.io/npm/v/djelia.svg)](https://npmjs.org/package/djelia) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/djelia)
 
 Welcome to the Djelia JavaScript SDK! This powerful library enables seamless integration with Djelia's AI services for African languages, featuring translation, transcription, and text-to-speech capabilities. Built with modern JavaScript/Node.js, it offers both Promise-based and streaming APIs for maximum flexibility. can't be fun, right? Let's dive in!
 
